@@ -126,6 +126,7 @@ async function combineImages() {
         let totalHeight = 0;
         let totalWidth = 0;
         let standardWidth = 0;
+        const DOWNSCALE_FACTOR = 10; // Scale down dimensions by factor of 13
 
         if (ozpertValue && coreValue) {
             imagesToLoad.push(
@@ -163,21 +164,40 @@ async function combineImages() {
             totalHeight = scaledOzHeight + standardWidth * resizedBadges.length;
             totalWidth = Math.max(scaledOzWidth, standardWidth);
         }
-        const standardWidthFinal = totalWidth;
 
-        canvas.width = standardWidthFinal;
-        canvas.height = totalHeight;
+        // Apply downscaling to canvas dimensions
+        canvas.width = totalWidth / DOWNSCALE_FACTOR;
+        canvas.height = totalHeight / DOWNSCALE_FACTOR;
 
         ctx.fillStyle = '#FFFFFF';
-        ctx.fillRect(0, 0, standardWidthFinal, totalHeight);
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        ctx.drawImage(ozImage, (standardWidthFinal - scaledOzWidth) / 2, 0, scaledOzWidth, scaledOzHeight);
+        // Draw OZ image with scaled dimensions
+        ctx.drawImage(
+            ozImage, 
+            (canvas.width - scaledOzWidth / DOWNSCALE_FACTOR) / 2, 
+            0, 
+            scaledOzWidth / DOWNSCALE_FACTOR, 
+            scaledOzHeight / DOWNSCALE_FACTOR
+        );
 
         resizedBadges.forEach((badge, index) => {
             if (viewMode === 'horizontal') {
-                ctx.drawImage(badge, index * standardWidth, scaledOzHeight);
+                ctx.drawImage(
+                    badge, 
+                    index * (standardWidth / DOWNSCALE_FACTOR), 
+                    scaledOzHeight / DOWNSCALE_FACTOR, 
+                    standardWidth / DOWNSCALE_FACTOR, 
+                    standardWidth / DOWNSCALE_FACTOR
+                );
             } else {
-                ctx.drawImage(badge, 0, scaledOzHeight + index * standardWidth);
+                ctx.drawImage(
+                    badge, 
+                    0, 
+                    (scaledOzHeight + index * standardWidth) / DOWNSCALE_FACTOR, 
+                    standardWidth / DOWNSCALE_FACTOR, 
+                    standardWidth / DOWNSCALE_FACTOR
+                );
             }
         });
 
