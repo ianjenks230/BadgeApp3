@@ -94,7 +94,6 @@ function clearSelections() {
     ozScaleValue.textContent = ozScaleSlider.value;
 }
 
-// Function to combine images
 async function combineImages() {
     const ozpertValue = getSelectedValue('ozpertBadge');
     const coreValue = getSelectedValue('coreValue');
@@ -112,6 +111,7 @@ async function combineImages() {
     try {
         const imagesToLoad = [loadImageFromUrl(badgeImages.ozImage)];
         let totalHeight = 0;
+        let totalWidth = 0;
         let standardWidth = 0;
 
         if (ozpertValue && coreValue) {
@@ -142,8 +142,9 @@ async function combineImages() {
 
         const scaledOzWidth = ozImage.width * ozScaleFactor;
         const scaledOzHeight = ozImage.height * ozScaleFactor;
-        totalHeight = scaledOzHeight + standardWidth * resizedBadges.length;
-        const standardWidthFinal = Math.max(scaledOzWidth, standardWidth);
+        totalHeight = scaledOzHeight + (resizedBadges.length > 0 ? standardWidth : 0);
+        totalWidth = Math.max(scaledOzWidth, standardWidth * resizedBadges.length);
+        const standardWidthFinal = totalWidth;
 
         canvas.width = standardWidthFinal;
         canvas.height = totalHeight;
@@ -154,7 +155,7 @@ async function combineImages() {
         ctx.drawImage(ozImage, (standardWidthFinal - scaledOzWidth) / 2, 0, scaledOzWidth, scaledOzHeight);
 
         resizedBadges.forEach((badge, index) => {
-            ctx.drawImage(badge, 0, scaledOzHeight + index * standardWidth);
+            ctx.drawImage(badge, index * standardWidth, scaledOzHeight);
         });
 
         canvas.toBlob(blob => {
