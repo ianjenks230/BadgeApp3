@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Email Badge Combiner</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>Email Badge Combiner</h1>
+
+    <div class="badge-selection">
+      <div class="badge-group">
+        <h3>Ozpert Badges:</h3>
+        <div class="radio-group">
+          <label>
+            <input type="radio" name="ozpertBadge" value="bronze" />
+            Bronze
+          </label>
+          <label>
+            <input type="radio" name="ozpertBadge" value="silver" />
+            Silver
+          </label>
+          <label>
+            <input type="radio" name="ozpertBadge" value="gold" />
+            Gold
+          </label>
+          <label>
+            <input type="radio" name="ozpertBadge" value="diamond" />
+            Diamond
+          </label>
+        </div>
+      </div>
+
+      <div class="badge-group">
+        <h3>OZ Core Values:</h3>
+        <div class="radio-group">
+          <label>
+            <input type="radio" name="coreValue" value="bePositive" />
+            Be Positive
+          </label>
+          <label>
+            <input type="radio" name="coreValue" value="empathize" />
+            Empathize
+          </label>
+          <label>
+            <input type="radio" name="coreValue" value="evolveConstantly" />
+            Evolve Constantly
+          </label>
+          <label>
+            <input type="radio" name="coreValue" value="focusOnOutcome" />
+            Focus on Outcome
+          </label>
+          <label>
+            <input type="radio" name="coreValue" value="succeedAsTeam" />
+            We Succeed as a Team
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="slider-container">
+        <label for="ozScaleSlider">Top Badge (OZ) Scale:</label>
+        <input type="range" id="ozScaleSlider" min="0.5" max="3" step="0.1" value="1.5">
+        <span id="ozScaleValue">1.5</span>
+    </div>
+    <div class="slider-container">
+        <label for="badgeScaleSlider">Lower Badges Scale:</label>
+        <input type="range" id="badgeScaleSlider" min="0.5" max="3" step="0.1" value="1.5">
+        <span id="badgeScaleValue">1.5</span>
+    </div>
+    
+    <button id="downloadBtn" disabled>Download Combined Image</button>
+    <button id="clearBtn">Clear Selection</button>
+
+    
+
+    <p class="note">Select one or both badges from the categories and click "Combine Selected Badges".</p>
+    <canvas id="canvas"></canvas>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
