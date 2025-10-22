@@ -1,4 +1,4 @@
-const combineBtn = document.getElementById("combineBtn");
+
 const downloadBtn = document.getElementById("downloadBtn");
 const clearBtn = document.getElementById("clearBtn");
 const canvas = document.getElementById("canvas");
@@ -185,7 +185,7 @@ document.querySelectorAll('input[type="radio"]').forEach(radio => {
     radio.addEventListener("change", combineImages);
 });
 
-combineBtn.addEventListener("click", combineImages);
+
 
 downloadBtn.addEventListener("click", () => {
     if (!combinedImageBlob) return;
