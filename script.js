@@ -93,12 +93,25 @@ function clearSelections() {
     ozScaleSlider.value = 1.5;
     ozScaleValue.textContent = ozScaleSlider.value;
 }
+// Function to get selected radio button value from a group
+function getSelectedValue(name) {
+    const radio = document.querySelector(`input[name="${name}"]:checked`);
+    return radio ? radio.value : null;
+}
 
+// Function to get selected view mode (horizontal or vertical)
+function getViewMode() {
+    const viewMode = document.querySelector('input[name="viewMode"]:checked');
+    return viewMode ? viewMode.value : 'vertical'; // Default to vertical if none selected
+}
+
+// Function to combine images
 async function combineImages() {
     const ozpertValue = getSelectedValue('ozpertBadge');
     const coreValue = getSelectedValue('coreValue');
+    const viewMode = getViewMode();
     
-    console.log('Selected badges:', { ozpertValue, coreValue });
+    console.log('Selected badges:', { ozpertValue, coreValue, viewMode });
     
     if (!ozpertValue && !coreValue) {
         canvas.width = 0;
@@ -142,8 +155,14 @@ async function combineImages() {
 
         const scaledOzWidth = ozImage.width * ozScaleFactor;
         const scaledOzHeight = ozImage.height * ozScaleFactor;
-        totalHeight = scaledOzHeight + (resizedBadges.length > 0 ? standardWidth : 0);
-        totalWidth = Math.max(scaledOzWidth, standardWidth * resizedBadges.length);
+
+        if (viewMode === 'horizontal') {
+            totalWidth = Math.max(scaledOzWidth, standardWidth * resizedBadges.length);
+            totalHeight = scaledOzHeight + (resizedBadges.length > 0 ? standardWidth : 0);
+        } else {
+            totalHeight = scaledOzHeight + standardWidth * resizedBadges.length;
+            totalWidth = Math.max(scaledOzWidth, standardWidth);
+        }
         const standardWidthFinal = totalWidth;
 
         canvas.width = standardWidthFinal;
@@ -155,7 +174,11 @@ async function combineImages() {
         ctx.drawImage(ozImage, (standardWidthFinal - scaledOzWidth) / 2, 0, scaledOzWidth, scaledOzHeight);
 
         resizedBadges.forEach((badge, index) => {
-            ctx.drawImage(badge, index * standardWidth, scaledOzHeight);
+            if (viewMode === 'horizontal') {
+                ctx.drawImage(badge, index * standardWidth, scaledOzHeight);
+            } else {
+                ctx.drawImage(badge, 0, scaledOzHeight + index * standardWidth);
+            }
         });
 
         canvas.toBlob(blob => {
@@ -177,7 +200,9 @@ document.querySelectorAll('input[type="radio"]').forEach(radio => {
     radio.addEventListener("change", combineImages);
 });
 
-
+document.querySelectorAll('input[name="viewMode"]').forEach(radio => {
+    radio.addEventListener("change", combineImages);
+});
 
 downloadBtn.addEventListener("click", () => {
     if (!combinedImageBlob) return;
@@ -190,7 +215,9 @@ downloadBtn.addEventListener("click", () => {
 });
 
 clearBtn.addEventListener("click", clearSelections);
-
+document.querySelectorAll('input[name="viewMode"]').forEach(radio => {
+    radio.addEventListener("change", combineImages);
+});
 function loadImage(file) {
     return new Promise((resolve, reject) => {
         const img = new Image();
