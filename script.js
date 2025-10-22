@@ -91,9 +91,7 @@ function clearSelections() {
     combinedImageBlob = null;
     downloadBtn.disabled = true;
     ozScaleSlider.value = 1.5;
-    badgeScaleSlider.value = 1.5;
     ozScaleValue.textContent = ozScaleSlider.value;
-    badgeScaleValue.textContent = badgeScaleSlider.value;
 }
 
 // Function to combine images
