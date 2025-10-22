@@ -4,9 +4,7 @@ const clearBtn = document.getElementById("clearBtn");
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const ozScaleSlider = document.getElementById("ozScaleSlider");
-const badgeScaleSlider = document.getElementById("badgeScaleSlider");
 const ozScaleValue = document.getElementById("ozScaleValue");
-const badgeScaleValue = document.getElementById("badgeScaleValue");
 
 // Badge image paths
 const badgeImages = {
@@ -132,7 +130,7 @@ async function combineImages() {
         const selectedImages = await Promise.all(imagesToLoad);
         const ozImage = selectedImages[0];
         const ozScaleFactor = parseFloat(ozScaleSlider.value);
-        const badgeScaleFactor = parseFloat(badgeScaleSlider.value);
+        const badgeScaleFactor = 3; // Fixed scale for lower badges
 
         if (selectedImages.length > 1) {
             standardWidth = Math.max(
@@ -173,11 +171,6 @@ async function combineImages() {
 // Event listeners for dynamic updates
 ozScaleSlider.addEventListener("input", () => {
     ozScaleValue.textContent = ozScaleSlider.value;
-    combineImages();
-});
-
-badgeScaleSlider.addEventListener("input", () => {
-    badgeScaleValue.textContent = badgeScaleSlider.value;
     combineImages();
 });
 
